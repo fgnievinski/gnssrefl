@@ -49,6 +49,7 @@ This should install gcc and gfortran, as well as python and pip.
 Additional packages can be installed as:
 <code>pacman -S cmake</code>
 <code>pacman -S mingw-w64-ucrt-x86_64-python-scipy</code>
+<code>pacman -S ninja</code>
 
 **Checks**
 
