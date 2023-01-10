@@ -11,8 +11,11 @@ github/pypi package installation.
 
 **YOU MUST BE RUNNING python version 3.9 or lower.**
 
+### Dependencies
+
 For installation with github/pypi, the setup requires a few system dependencies: gcc and gfortran.
-**If you are using linux** then simply type
+
+**If you are using Linux** then simply type
 
 <code>apt-get install -y gcc</code>
 
@@ -31,7 +34,25 @@ If it is installed, it should return a path. If it is not installed then run
 
 <code>xcode-select --install</code>
 
-This should install gcc. You can check if you have gcc by typing
+This should install gcc. 
+
+**If you are using Windows** then you will need to install <code>msys2</code>.
+
+Follow the installation instructions at [www.msys2.org](https://www.msys2.org/#installation)
+
+Then run:
+
+<code>pacman -S gcc gcc-fortran</code>
+<code>pacman -S python python-pip</code>
+This should install gcc and gfortran, as well as python and pip.
+
+Additional packages can be installed as:
+<code>pacman -S cmake</code>
+<code>pacman -S mingw-w64-ucrt-x86_64-python-scipy</code>
+
+**Checks**
+
+You can check if you have gcc by typing
 
 <code>gcc --version</code>
 
@@ -41,7 +62,7 @@ You can check to see if you have gfortran by typing
 
 If you do not have gfortran, then you can use homebrew to install (<code>brew install gfortran</code>).
 
-*Environment Variables*
+### Environment Variables
 
 You should define three environment variables:
 
@@ -63,7 +84,7 @@ you want everything to be (to be honest, I have not tested this in a while).
 The orbits, SNR files, and periodogram results are stored in
 directories in year, followed by type, i.e. snr, results, sp3, nav, and then by station name.
 
-*Direct Python Install*
+### Direct Python Install
 
 If you are using the version from gitHub:
 
@@ -86,7 +107,7 @@ PyPi version:
 * so please read below or type <code>installexe -h</code> 
 
 
-*Non-Python Code:*
+### Non-Python Code:
 
 <code>installexe</code> should download and install two key utilities used in teh GNSS 
 community: CRX2RNX and gfzrnx. It currently works for linux, macos and mac-newchip options. If you are using 
