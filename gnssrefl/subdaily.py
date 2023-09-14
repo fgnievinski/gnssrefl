@@ -1482,8 +1482,8 @@ def rhdot_correction2(station,fname,fname_new,pltit,outlierV,outlierV2,**kwargs)
     strsig = str(round(newsigma,3)) + '(m)'
 
     fig=plt.figure(figsize=(10,5))
-    #plt.subplot(2,1,1)
-    #plt.plot(th, biasCor_rh, 'b.', label='RH with RHdot/IFcorr ' + strsig)
+    plt.subplot(2,1,1)
+    plt.plot(th, biasCor_rh, 'b.', label='RH with RHdot/IFcorr ' + strsig)
     plt.plot(th_even, spline_whole_time, 'c-',label='newspline')
 
     if outlierV2 is None:
@@ -1500,22 +1500,33 @@ def rhdot_correction2(station,fname,fname_new,pltit,outlierV,outlierV2,**kwargs)
         # points to keep
         jj = np.abs(biasCor_rh -spline_at_GPS) <= OutlierLimit
 
-
-    #plt.plot(th[ii], biasCor_rh[ii], 'rx', label='outliers')
+    plt.plot(th[ii], biasCor_rh[ii], 'rx', label='outliers')
 
     plt.legend(loc="upper left")
     plt.grid()
     plt.gca().invert_yaxis()
-    plt.ylabel('Water level (meters)')
-    plt#.ylabel('meters')
-    #plt.title('Station: ' + station + ', new spline, RHdot corr/InterFreq corr/outliers removed')
-    #plt.xlabel('days of the year')
-    plt.xlabel('Time (days)')
+    plt.ylabel('meters')
+    plt.title('Station: ' + station + ', new spline, RHdot corr/InterFreq corr/outliers removed')
+    plt.xlabel('days of the year')
     # put hires_figs boolean here
     if hires_figs:
         g.save_plot(txtdir + '/' + station + '_rhdot4.eps')
     else:
         g.save_plot(txtdir + '/' + station + '_rhdot4.png')
+
+    H0=10
+    fig=plt.figure(figsize=(10,5))
+    plt.plot(th_even, H0-spline_whole_time, 'c-',label='')
+    plt.grid()
+    #plt.gca().invert_yaxis()
+    plt.ylabel('Water level (meters)')
+    plt.xlabel('Time (days)')
+    # put hires_figs boolean here
+    if hires_figs:
+        g.save_plot(txtdir + '/' + station + '_rhdot4b.eps')
+    else:
+        g.save_plot(txtdir + '/' + station + '_rhdot4b.png')
+
 
     fig=plt.figure(figsize=(10,5))
     #plt.subplot(2,1,1)
@@ -1783,4 +1794,3 @@ def numsats_plot(station,tval,nval,Gval,Rval,Eval,Cval,txtdir,fs,hires_figs):
     else:
         plt.savefig(plotname,dpi=300)
     print('png file saved as: ', plotname)
-
