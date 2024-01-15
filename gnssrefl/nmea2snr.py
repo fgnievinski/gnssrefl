@@ -833,7 +833,11 @@ def run_nmea2snr(station, year_list, doy_list, isnr, overwrite, dec, llh, sp3, g
                 r =  station + cdoy + '0.' + cyy + '.A'# nmea file name example:  WESL2120.21.A 
                 if os.path.exists(locdir+r) or os.path.exists(locdir+r+'.gz') or os.path.exists(locdir+r+'.Z') or (station == 'argt'):
                     #print('Creating '+snrfile)
-                    NMEA2SNR(locdir, r, snrfile, csnr, dec, yr, dy, llh, sp3, gzip)
+                    try
+                        NMEA2SNR(locdir, r, snrfile, csnr, dec, yr, dy, llh, sp3, gzip)
+                    except
+                        print('NMEA file '+ locdir + r +' failed reading')
+                        continue                        
                     if os.path.isfile(snrfile):
                         print('SUCCESS: SNR file created', snrfile)
                     if os.path.isfile(locdir + r ):
