@@ -28,7 +28,7 @@ def parse_arguments():
     parser.add_argument("-extension", default=None, type=str, help="solution subdirectory")
     parser.add_argument("-rhdot", default=None, type=str, help="set to False if you want to stop after section 1 of the QC code")
     parser.add_argument("-doy1", default=None, type=int, help="initial day of year")
-    parser.add_argument("-doy2", default=None, type=int, help="end day of year")
+    parser.add_argument("-doy2", default=None, type=int, help="end day of year (or year_end, if input)")
     parser.add_argument("-testing", default=None, type=str, help="set to False for old code ")
     parser.add_argument("-ampl", default=None, type=float, help="new amplitude constraint")
     parser.add_argument("-azim1", default=None, type=int, help="new min azimuth")
@@ -249,7 +249,19 @@ def subdaily(station: str, year: int, txtfile_part1: str = '', txtfile_part2: st
 
         for y in range(year,year_end+1):
             print('reading year: ', y)
-            ntv, obstimes, fname, fname_new = t.readin_and_plot(station, y, doy1, doy2, plt, \
+            if year==year_end
+                d1 = doy1
+                d2 = doy2
+            elif y==year
+                d1 = doy1
+                d2 = 366
+            elif y==year_end
+                d1 = 1
+                d2 = doy2
+            else
+                d1 = 1
+                d2 = 366
+            ntv, obstimes, fname, fname_new = t.readin_and_plot(station, y, d1, d2, plt, \
                     extension, sigma, writecsv, azim1, azim2, ampl, peak2noise, txtfile_part1, \
                     h1,h2,kplt,txtdir,default_usage,hires_figs,fs,alt_sigma=alt_sigma)
             outputs.append(fname_new)
