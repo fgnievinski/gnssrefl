@@ -360,23 +360,33 @@ def readin_and_plot(station, year,d1,d2,plt2screen,extension,sigma,writecsv,azim
 
         #print( len(tmp[ri,1])) print( len(tmp[ei,1]))
 
+        rh = tv[ii,2];
         if (n > 0):
-            if alt_sigma:
-            # make sigma clipping more robust against outliers:
-            # https://en.wikipedia.org/wiki/Median_absolute_deviation#Relation_to_standard_deviation
-                rhavg = np.median(tv[ii,2]); 
-                rhstd = np.median(abs(tv[ii,2]-rhavg))/0.6745;            
+            if (alt_sigma==False):
+                rhavg = np.mean(rh); 
+                rhstd = np.std(rh); 
+                rhtrend = rhavg*np.ones( len(rh) )
+            elseif (alt_sigma==True):
+                # make sigma clipping more robust against outliers:
+                # https://en.wikipedia.org/wiki/Median_absolute_deviation#Relation_to_standard_deviation
+                rhavg = np.median(rh);
+                rhstd = np.median(abs(rh-rhavg))/0.6745;
+                rhtrend = rhavg*np.ones( len(rh) )
             else:
-                rhavg = np.mean(tv[ii,2]); 
-                rhstd = np.std(tv[ii,2]); 
+                # use a polynomial fit:
+                deg = alt_sigma;  # 2 is a parabola, 1 is a straight-line, etc.
+                pc = np.polyfit(otimes[ii], rh, deg);
+                rhtrend = np.polyval(pc, otimes[ii]);
+                rhres = rh - rhtrend;
+                rhstd = np.median(abs(rhres))/0.6745;
 
             newl = [dtime, rhavg, rhstd]
             stats = np.append(stats, [newl], axis=0)
             if rhstd == 0:
                 rhstd = 1
                 
-            b = ( tv[ii,2] - rhavg*np.ones( len(tv[ii,2]) ))/ rhstd
-            bb =  tv[ii,2] - rhavg*np.ones( len(tv[ii,2]) )
+            bb = rh - rhtrend  # residual
+            b = bb / rhstd  # normalized residual
             
             residuals = np.append(residuals, b)
             real_residuals = np.append(real_residuals, bb)
