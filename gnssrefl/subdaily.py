@@ -362,23 +362,23 @@ def readin_and_plot(station, year,d1,d2,plt2screen,extension,sigma,writecsv,azim
 
         rh = tv[ii,2];
         if (n > 0):
-            if (alt_sigma==False):
-                rhavg = np.mean(rh); 
-                rhstd = np.std(rh); 
-                rhtrend = rhavg*np.ones( len(rh) )
-            elseif (alt_sigma==True):
-                # make sigma clipping more robust against outliers:
-                # https://en.wikipedia.org/wiki/Median_absolute_deviation#Relation_to_standard_deviation
-                rhavg = np.median(rh);
-                rhstd = np.median(abs(rh-rhavg))/0.6745;
-                rhtrend = rhavg*np.ones( len(rh) )
-            else:
+            if isistance(alt_sigma, int) and not isistance(alt_sigma, bool)
                 # use a polynomial fit:
                 deg = alt_sigma;  # 2 is a parabola, 1 is a straight-line, etc.
                 pc = np.polyfit(otimes[ii], rh, deg);
                 rhtrend = np.polyval(pc, otimes[ii]);
                 rhres = rh - rhtrend;
                 rhstd = np.median(abs(rhres))/0.6745;
+            elif isistance(alt_sigma, bool) and alt_sigma:
+                # make sigma clipping more robust against outliers:
+                # https://en.wikipedia.org/wiki/Median_absolute_deviation#Relation_to_standard_deviation
+                rhavg = np.median(rh);
+                rhstd = np.median(abs(rh-rhavg))/0.6745;
+                rhtrend = rhavg*np.ones( len(rh) )
+            else:
+                rhavg = np.mean(rh); 
+                rhstd = np.std(rh); 
+                rhtrend = rhavg*np.ones( len(rh) )
 
             newl = [dtime, rhavg, rhstd]
             stats = np.append(stats, [newl], axis=0)
