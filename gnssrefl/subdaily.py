@@ -369,6 +369,7 @@ def readin_and_plot(station, year,d1,d2,plt2screen,extension,sigma,writecsv,azim
                 rhtrend = np.polyval(pc, otimes[ii]);
                 rhres = rh - rhtrend;
                 rhstd = np.median(abs(rhres))/0.6745;
+                rhavg = np.median(rhtrend);
             elif isistance(alt_sigma, bool) and alt_sigma:
                 # make sigma clipping more robust against outliers:
                 # https://en.wikipedia.org/wiki/Median_absolute_deviation#Relation_to_standard_deviation
